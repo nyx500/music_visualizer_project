@@ -27,8 +27,11 @@ function PlaybackButton(){
 		{
 			if (sound.isPlaying()) {
     			sound.pause();
+				// noLoop() tip to pause animation received from https://www.youtube.com/watch?v=uk96O7N1Yo0
+				noLoop();
   			} else {
     			sound.loop();
+				loop();
   			}
   			this.playing = !this.playing;
 		}

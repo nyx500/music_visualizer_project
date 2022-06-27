@@ -109,9 +109,7 @@ function RidgePlots() {
 
             // Vibrates the lines in the middle where the have the most distortion due to frequency amplitude
             var change_in_Y = Math.abs(o[0].y - o[j].y);
-                // Use 100 because it is the value of bigScale, the largest y can deviate from its base-value
-                var vibrate = map(change_in_Y, 0, 100, 0, 5);
-                // Freeze animation if sound paused
+                var vibrate = map(change_in_Y, 0, bigScale, 0, 5);
                 if (sound.isPlaying())
                 {
                     if (o[j].x > startX * 1.25 && o[j].x < (startX + spectrumWidth) * 0.75)
@@ -131,7 +129,7 @@ function RidgePlots() {
             
             curveVertex(o[j].x, o[j].y);
 
-            // pauses the visualization if sound is paused
+            // freezes the visualization if sound is paused
             if (sound.isPlaying())
             {
                 o[j].y -= speed;
