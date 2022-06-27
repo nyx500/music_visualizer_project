@@ -1,0 +1,2 @@
+# musicVis
+Music visualization project
