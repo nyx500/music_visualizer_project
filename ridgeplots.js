@@ -109,7 +109,7 @@ function RidgePlots() {
 
             // Vibrates the lines in the middle where the have the most distortion due to frequency amplitude
             var change_in_Y = Math.abs(o[0].y - o[j].y);
-                var vibrate = map(change_in_Y, 0, bigScale, 0, 5);
+                var vibrate = map(change_in_Y, 0, 100, 0, 5);
                 if (sound.isPlaying())
                 {
                     if (o[j].x > startX * 1.25 && o[j].x < (startX + spectrumWidth) * 0.75)

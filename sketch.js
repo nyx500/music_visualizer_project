@@ -19,16 +19,19 @@ var numFlowersMin;
 var numFlowersMax;
 var numFlowersStep;
 
+// adjust petal number
 var numberOfPetals;
 var numberOfPetalsMin;
 var numberOfPetalsMax;
 var numberOfPetalsStep;
 
+// adjust piano threshold
 var pianoEnergyLimit;
 var pianoEnergyLimitMin;
 var pianoEnergyLimitMax;
 var pianoEnergyLimitStep;
 
+// adjust smoothness of FFT analyze
 var smoothingFactor;
 var smoothingFactorMin;
 var smoothingFactorgMax;
@@ -70,6 +73,7 @@ function setup(){
 	vis.add(new Piano());
 	vis.add(new Star());
 	vis.add(new Circle());
+	vis.add(new Starfield());
 	
 	
 	// create array of visuals names to put in GUI

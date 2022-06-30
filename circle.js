@@ -47,24 +47,14 @@ function Circle() {
                 noStroke();
             }
             else
-            {
-                stroke(10, 10, Math.floor(Math.random() * 256) + 1);
-                strokeCap(PROJECT);
-                strokeWeight(18);
+            {   
+                stroke(0, 0, 200);
+                fill(50, 50, color);
             }
-
-            // draws a tiny ellipse for the first three quarters of frequency array and lines for the last one
-            if (colorValue == 'red' || colorValue == 'green' || colorValue == 'yellow')
-            {
-                push();
-                rotate(angle_1 + this.prog);
-                ellipse(0, (-radius / 2), ellipseWidth, radius);
-                pop();
-            }
-            else
-            {
-                line(0, 0, cos(angle_1 + this.prog) * radius, sin(angle_1 + this.prog) * radius);
-            }
+            push();
+            rotate(angle_1 + this.prog);
+            ellipse(0, (-radius / 2), ellipseWidth, radius);
+            pop();
         }
 
         for (let i = (this.spectrum.length) * upperFreqLimit / 2; i < this.spectrum.length * upperFreqLimit;
@@ -79,7 +69,7 @@ function Circle() {
                 PI,
                 2*PI
             );
-            // maps the color of each line/ellipse making up the circle depending on the frequency's amplitude
+            // maps the color of each ellipse making up the circle depending on the frequency's amplitude
             let color = map(this.spectrum[i], 0, 255, 100, 255);
             strokeWeight(1.5);
             strokeCap(SQUARE);
@@ -100,24 +90,15 @@ function Circle() {
                 noStroke();
             }
             else
-            {
-                stroke(10, 10, Math.floor(Math.random() * 256) + 1);
-                strokeCap(PROJECT);
-                strokeWeight(18);
+            {   
+                stroke(0, 0, 200);
+                fill(50, 50, color);
             }
 
-            // draws a tiny ellipse for the first three quarters of frequency array and lines for the last one
-            if (colorValue == 'red' || colorValue == 'green' || colorValue == 'yellow')
-            {
                 push();
                 rotate(angle_2 + this.prog);
                 ellipse(0, (-radius / 2), ellipseWidth, radius);
                 pop();
-            }
-            else
-            {
-                line(0, 0, cos(angle_2 + this.prog) * radius, sin(angle_2 + this.prog) * radius);
-            }
         }
     }
 
@@ -131,13 +112,14 @@ function Circle() {
         translate(width / 2, height / 2);
         
         // draws a circle for each quarter of fourier.analyze();
-        this.drawCircle(0.75, 1, 300, 340,'blue', null);
+        this.drawCircle(0.75, 1, 300, 360,'blue', 8);
         this.drawCircle(0.5, 0.75, 250, 320,'green', 9);
         this.drawCircle(0.25, 0.5, 150, 250,'yellow', 7);
         this.drawCircle(0, 0.25, 50, 150,'red', 5);
 
         pop();
 
+        // increases the position of each ellipse by an angle each frame
         this.prog += (spinSpeed * PI) / 180;
     }
 }
