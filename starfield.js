@@ -15,11 +15,13 @@ class BabyStar{
         this.velocity_y = sin(this.angles[Math.floor(Math.random() * this.angles.length)]) * 1
         this.velocity = createVector(this.velocity_x, this.velocity_y);
         this.acceleration = 1.2;
-        this.size = 5;
+        this.size = 10;
     }
     draw()
     {
-        // fill in later
+        noStroke();
+        fill(255);
+        ellipse(this.pos.x, this.pos.y, this.size);
     }
     update()
     {
@@ -44,6 +46,15 @@ function Starfield()
             console.log('stars 0 to 9');
             console.log(this.stars[i]); 
         }
+
+        push();
+        translate (width / 2, height / 2)
+        for (var i = 0; i < this.stars.length; i++)
+        {
+            this.stars[i].draw();
+        }
+        pop();
+        
     }
 
 }
