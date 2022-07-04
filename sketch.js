@@ -148,13 +148,13 @@ function setup(){
 }
 
 function draw(){
+	colorMode(RGB);
 	background(0);
 	vis.selectVisual(pickVisual.toLowerCase());
 	//draw the selected visualisation
 	vis.selectedVisual.draw();
 	//draw the controls on top.
 	controls.draw();
-
 }
 
 function mouseClicked(){
