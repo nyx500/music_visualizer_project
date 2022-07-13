@@ -50,6 +50,8 @@ function Starfield()
     colorMode(HSB, 255);
     this.name = 'starfield';
     this.stars = [];
+    this.beatDetector = new BeatDetector();
+
     this.updateStars = function()
     {
         for (var i =  this.stars.length - 1; i >= 0; i--)
@@ -109,6 +111,16 @@ function Starfield()
 
     this.draw = function() {
         
+        /*
+            Attribution for background image:
+            'https://www.freepik.com/vectors/galaxy-universe'
+        */
+
+        background(galaxyBgImg);
+        // put a semi-transparent black rectangle to cover the background to make it darker
+        fill(0, 0, 0, 200);
+        rect(0, 0, width, height);
+
         if (sound.isPlaying())
         {
             this.updateStars();
@@ -117,6 +129,20 @@ function Starfield()
         for (var i = 0; i < this.stars.length; i++)
         {
             this.stars[i].draw();
+
+            // if a peak is detected, then flash the screen black and back to stars again
+            // also increase the velocity of each star three times
+            if(this.beatDetector.detectBeat())
+            {   
+                fill(0, 0, 0, 255);
+                rect(0, 0, width, height);
+
+                for (var j = 0; j < this.stars.length; j++)
+                {
+                    this.stars[j].velocity = this.stars[j].velocity.mult(this.stars[j].acceleration);
+                }
+            }
+            ;
         }
     }
 

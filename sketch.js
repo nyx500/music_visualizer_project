@@ -1,3 +1,6 @@
+//global for background galaxy image;
+var galaxyBgImg;
+
 //global for the controls and input 
 var controls = null;
 //store visualisations in a container
@@ -48,13 +51,16 @@ var fullScreenImage;
 
 
 function preload(){
-	sound = loadSound('assets/logical.mp3');
+	sound = loadSound('assets/prayerInC.MP3');
 	fullScreenImage = loadImage('assets/fullScreen.png');
 	exitFullScreenImage = loadImage('assets/exitFullScreen.png');
 }
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
+
+	galaxyBgImg = loadImage('assets/galaxy.jpg');	
+
 	background(0);
 	controls = new ControlsAndInput();
 
