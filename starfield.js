@@ -1,3 +1,6 @@
+/* What to do today: cap the size so stars don't get too huge when they come close using constrain
+- alter the brightness so it's more noticeable - get the beat - watch beat analyzer video - program 
+stars to the beat to accelerate more than once if beat happens */
 class BabyStar{
     // constructor method to add properties using 'this'
     constructor(x, y)
@@ -10,30 +13,25 @@ class BabyStar{
             this.angles.push(i);
         }
         
-        this.velocity_x = cos(this.angles[Math.floor(Math.random() * this.angles.length)]);
-        this.velocity_y = sin(this.angles[Math.floor(Math.random() * this.angles.length)]);
+        this.velocity_x = cos(this.angles[Math.floor(Math.random() * this.angles.length)])
+            * 5;
+
+        this.velocity_y = sin(this.angles[Math.floor(Math.random() * this.angles.length)])
+            * 5;
+
+        
         this.velocity = createVector(this.velocity_x, this.velocity_y);
-
-        this.multiplier = (Math.random() * 2) + 1.1;
-
-        // generates a -1 or a 1 randomly (for different directions of the vector);
-        this.randomPolarity;
-
-        if (Math.random() > 0.5)
+       
+        // Ensures that there is no starting velocity whose magnitude is less than 1
+        while (this.velocity.mag() < 1)
         {
-            this.randomPolarity = 1;
-        }
-        else
-        {
-            this.randomPolarity = -1;
+            this.velocity.mult(1.5);
         }
 
-        this.multiplier = this.multiplier * this.randomPolarity;
-
-        this.velocity = this.velocity.mult(this.multiplier);
-        this.acceleration = 1.005;
+        this.magnitude = this.velocity.mag();
+        this.acceleration = 1.015;
         this.size = 5;
-        this.color = color(50, 0, 120);
+        this.color = color(50, 0, 100);
         this.brightness = brightness(this.color);
     }
     draw()
@@ -78,8 +76,20 @@ function Starfield()
             {
                 this.stars[i].velocity = this.stars[i].velocity.mult(this.stars[i].acceleration); 
             }
-            this.stars[i].size *= 1.0015;
-            this.stars[i].brightness = constrain(this.stars[i].brightness * 1.01, 120, 255);
+            
+            // create array of all current magnitudes of the stars we have right now
+            let mags = this.stars.map(star => 
+                {
+                    return star.magnitude;
+                })
+            /* maps the size_increment to the magnitude of each star's velocity, so slow stars do
+                not get really huge */
+            let size_increment = map(this.stars[i].magnitude, 0, max(mags), 1.0005, 1.012);
+            this.stars[i].size *= size_increment;
+
+            /* Do the same for the brightness of the stars as they come closer */
+            let brightness_increment = map(this.stars[i].magnitude, 0, max(mags), 0.01, 4);
+            this.stars[i].brightness += brightness_increment;
         }
     }
     this.makeStars = function(){
