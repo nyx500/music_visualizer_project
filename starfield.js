@@ -1,6 +1,6 @@
-/* What to do today: cap the size so stars don't get too huge when they come close using constrain
+/* TODO: cap the size so stars don't get too huge when they come close using constrain
 - alter the brightness so it's more noticeable - get the beat - watch beat analyzer video - program 
-stars to the beat to accelerate more than once if beat happens */
+stars to the beat to accelerate more than once if beat happens --> DONE */
 class BabyStar{
     // constructor method to add properties using 'this'
     constructor(x, y)
@@ -30,7 +30,7 @@ class BabyStar{
         }
 
         this.magnitude = this.velocity.mag();
-        this.acceleration = 1.015;
+        this.acceleration = 1.03;
         this.size = 5;
         this.color = color(50, 0, 100);
         // use the brightness instead of color as stars are in monochrome
@@ -48,12 +48,60 @@ class BabyStar{
     }
 }
 
+/*Attribution: adapted code from https://p5js.org/examples/form-star.html */
+class OriginStar{
+    constructor(numPoints)
+    {
+        this.x_pos = width/2;
+        this.y_pos = height/2;
+        this.numPoints = numPoints;
+        this.angle = TWO_PI / this.numPoints;
+        this.angles = [];
+
+        for (var i = 0; i < TWO_PI; i += this.angle)
+        {
+            this.angles.push(i + this.angle);
+        }
+
+        this.littleRadius = 10;
+        this.bigRadius = 50;
+        this.color = color(255, 0, 255);
+    }
+
+    draw()
+    {   
+        fill(this.color);
+        noStroke();
+        
+        beginShape()
+        for (let a = 0; a < this.angles.length; a++)
+        {       
+        
+                let smallCirclePointX = this.x_pos + cos(this.angles[a]) * this.littleRadius;
+                let smallCirclePointY = this.y_pos + sin(this.angles[a]) * this.littleRadius;
+                vertex(smallCirclePointX, smallCirclePointY);
+            
+                let bigCirclePointX = this.x_pos + cos(this.angles[a]) * this.bigRadius;
+                let bigCirclePointY = this.y_pos + sin(this.angles[a]) * this.bigRadius;
+                vertex(bigCirclePointX, bigCirclePointY);
+                
+                // smallCirclePointX = this.x_pos + cos(this.angles[a + 1]) * this.littleRadius;
+                // smallCirclePointY = this.y_pos + sin(this.angles[a + 1]) * this.littleRadius;
+                // vertex(smallCirclePointX, smallCirclePointY);
+        }
+        endShape();
+    }
+}
+
 function Starfield()
 {   
     colorMode(HSB, 255);
     this.name = 'starfield';
     this.stars = [];
-    this.beatDetector = new BeatDetector();
+    this.advancedBeatDetector = new AdvancedBeatDetector(1.165);
+    this.origin_star = new OriginStar(50);
+    this.countFramesForThisVisualization = 0;
+
 
     this.updateStars = function()
     {   
@@ -112,12 +160,17 @@ function Starfield()
         {
             this.updateStars();
         }
-        return this.stars;
+
+          return this.stars;
+        
     }
 
     this.stars = this.makeStars();
 
     this.draw = function() {
+
+        
+        this.countFramesForThisVisualization++;
         
         /*
             Attribution for background galaxy image:
@@ -125,33 +178,50 @@ function Starfield()
         */
 
         background(galaxyBgImg);
-        // put a semi-transparent black rectangle to cover the background to make it darker
-        fill(0, 0, 0, 200);
-        rect(0, 0, width, height);
 
         if (sound.isPlaying())
         {
             this.updateStars();
         }
 
+        var isBeat = this.advancedBeatDetector.detectBeat();
+
+
+        /* Only start representing beat after 1.3 seconds --> the beat detector needs time
+            to be reliable and to properly calculate enough variance
+        */
+        if (this.countFramesForThisVisualization >= this.advancedBeatDetector.frameRate * 1.3)
+        {
+            if(isBeat)
+            {   
+                for (var i = 0; i < this.stars.length; i++)
+                {
+                    this.stars[i].velocity = this.stars[i].velocity.mult(this.stars[i].acceleration);   
+                }
+                background(galaxyBgImg);
+                fill(0, 0, 0, 200);
+                this.origin_star.bigRadius = 150;
+
+            }
+            else
+            {   
+                background(galaxyBgImg);
+                fill(0, 0, 0, 100);
+                this.origin_star.bigRadius = 50;
+            }
+        
+            rect(0, 0, width, height);
+        }
+        
+
+
         for (var i = 0; i < this.stars.length; i++)
         {
             this.stars[i].draw();
-
-            // if a peak/beat is detected, then flash the screen black and back to stars again
-            // also increase the velocity of each star three times
-            if(this.beatDetector.detectBeat())
-            {   
-                fill(0, 0, 0, 255);
-                rect(0, 0, width, height);
-
-                for (var j = 0; j < this.stars.length; j++)
-                {
-                    this.stars[j].velocity = this.stars[j].velocity.mult(this.stars[j].acceleration);
-                }
-            }
-            ;
         }
-    }
+
+        this.origin_star.draw();
+
+     }
 
 }

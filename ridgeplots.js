@@ -68,7 +68,8 @@ function RidgePlots() {
 
 	//draw the ridge plots to the screen
 	this.draw = function() {
-
+        
+        background(0);
         // Adds a wave every 30 frames
         if (frameCount % 10 == 0)
         {

@@ -1,6 +1,9 @@
 //global for background galaxy image;
 var galaxyBgImg;
-
+// global for nyc image
+/*https://www.goodfon.com/download/4k-hd-background-metropolis-skyline-architecture-tower-skysc/1920x1080/
+*/
+var nyc;
 //global for the controls and input 
 var controls = null;
 //store visualisations in a container
@@ -58,12 +61,12 @@ function preload(){
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
+	background(0);
 
 	galaxyBgImg = loadImage('assets/galaxy.jpg');	
+	nyc = loadImage('assets/nyc.jpg');
 
-	background(0);
 	controls = new ControlsAndInput();
-
 
 	//instantiate the fft object
 	fourier = new p5.FFT();
@@ -80,6 +83,8 @@ function setup(){
 	vis.add(new Star());
 	vis.add(new Circle());
 	vis.add(new Starfield());
+	vis.add(new Raindrops());
+	vis.add(new Tree());
 	
 	
 	// create array of visuals names to put in GUI
@@ -155,7 +160,6 @@ function setup(){
 
 function draw(){
 	colorMode(RGB);
-	background(0);
 	vis.selectVisual(pickVisual.toLowerCase());
 	//draw the selected visualisation
 	vis.selectedVisual.draw();

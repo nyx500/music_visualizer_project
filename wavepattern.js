@@ -5,6 +5,8 @@ function WavePattern() {
 
 	//draw the wave form to the screen
 	this.draw = function() {
+		
+        background(0);
 		push();
 		noFill();
 		stroke(255, 0, 0);

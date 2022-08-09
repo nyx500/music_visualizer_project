@@ -2,6 +2,7 @@ function Spectrum(){
 	this.name = "spectrum";
 
 	this.draw = function(){
+		
 		push();
 		fourier.smooth(smoothingFactor);
 		var spectrum = fourier.analyze();

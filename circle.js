@@ -8,7 +8,6 @@ function Circle() {
     this.drawCircle = function(lowerFreqLimit, upperFreqLimit, lowerRadius, upperRadius,
         colorValue, ellipseWidth)
     {   
-
         for (
                 let i = (this.spectrum.length) * lowerFreqLimit;
                 i < (this.spectrum.length) * upperFreqLimit / 2;
@@ -103,7 +102,7 @@ function Circle() {
     }
 
     this.draw = function(){
-
+        background(0)
         fourier.smooth(smoothingFactor);
         this.spectrum = fourier.analyze();
 

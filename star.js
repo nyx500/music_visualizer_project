@@ -44,7 +44,8 @@ function Star() {
 
     this.draw = function(){
 
-
+        
+        background(0);
         fourier.smooth(smoothingFactor);
         fourier.analyze();
 

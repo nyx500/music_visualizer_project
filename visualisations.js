@@ -12,7 +12,10 @@ function Visualisations(){
 	};
 
 	this.draw = function() {
-		background(0);
+		if (this.selectedVisual != null)
+		{
+				background(0);
+		}	
 	}
 
 	//select a visualisation using it name property

@@ -137,7 +137,9 @@ function Piano(){
     /*draws the piano using the coordinates stored in each key object in
     the octave array */
     this.drawPiano = function()
-    {
+    {   
+        
+        background(0);
         for (var i = 0; i < this.octaves.length; i++)
         {
             for (var j = 0; j < this.octaves[i].length; j++)
