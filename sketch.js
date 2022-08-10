@@ -54,7 +54,7 @@ var fullScreenImage;
 
 
 function preload(){
-	sound = loadSound('assets/prayerInC.MP3');
+	sound = loadSound('assets/daftPunk.mp3');
 	fullScreenImage = loadImage('assets/fullScreen.png');
 	exitFullScreenImage = loadImage('assets/exitFullScreen.png');
 }
