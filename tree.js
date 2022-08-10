@@ -4,7 +4,7 @@ function Tree()
     this.name='tree';
     /* Set higher constant/sensitivity for beat detector than other visualizations
      because I do not want the tree to change color TOO quickly*/
-    this.beatDetector = new AdvancedBeatDetector(1.3);
+    this.beatDetector = new AdvancedBeatDetector(1.17);
     this.beginLength = 200;
     // Records if the tree is fully grown (-->can now stop adding new branches)
     this.isCompleted = false;
@@ -27,6 +27,8 @@ function Tree()
     this.howManyLeavesLightened = 0;
     this.fruits = [];
     this.fruitCount = 0;
+    this.fruitsRipened = 0;
+    this.fruitsFallen = 0;
 
     /* Checks if an object returned by the Branch constructor's
     addBranch method is a leaf or another branch, 
@@ -180,8 +182,98 @@ function Tree()
         }
     }
 
+    // ripens fruits in the whole fruit array by
+    // gradually changing color every time it's called
+    this.ripenFruits = function()
+    {   
+        for (var i = 0; i < this.fruits.length; i++)
+        {   
+            if (!this.fruits[i].ripe)
+            {  
+                this.fruits[i].ripen();
+            }
+            else
+            {
+                this.fruitsRipened++;
+            }
+        }
+    }
+
+    this.dropFruits = function()
+    {   
+        var randomIndex;
+        for (var i = 0; i < 10; i++)
+        {
+            randomIndex = this.returnRandomArrayIndex(this.fruits);
+            this.fruits[randomIndex].isFalling = true;
+        }
+    }
+
+    this.countFallenFruits = function()
+    {
+        var fallen = 0;
+
+        for (var i = 0; i < this.fruits.length; i++)
+        {
+            if (this.fruits[i].fallen)
+            {
+                fallen++;
+            }
+        }
+        return fallen;
+    }
+
+    this.autumnLeaves = function()
+    {
+        var randomIndex;
+        for (var i = 0; i < 20; i++)
+        {
+            randomIndex = this.returnRandomArrayIndex(this.leaves);
+            this.leaves[randomIndex].isTurning = true;
+        }
+    }
+
+    this.countAutumnLeaves = function()
+    {
+        var turned = 0;
+        for (var i = 0; i < this.leaves.length; i++)
+        {
+            if (this.leaves[i].autumn)
+            {
+                turned++;
+            }
+        }
+        return turned;
+    }
+
+    this.dropLeaves = function(howManyLeaves)
+    {   
+        var randomIndex;
+        for (var i = 0; i < howManyLeaves; i++)
+        {
+            randomIndex = this.returnRandomArrayIndex(this.leaves);
+            this.leaves[randomIndex].isFalling = true;
+        }
+    }
+
+    this.countFallenLeaves = function()
+    {
+        var fallen = 0;
+
+        for (var i = 0; i < this.leaves.length; i++)
+        {
+            if (this.leaves[i].fallen)
+            {
+                fallen++;
+            }
+        }
+        return fallen;
+    }
+
+
     this.draw = function()
     {   
+
         background(0);
 	    controls.draw();
         colorMode(RGB);
@@ -194,15 +286,37 @@ function Tree()
         for (var i = 0; i < this.leaves.length; i++)
         {   
             this.leaves[i].draw();
+            if (!this.leaves[i].autumn && this.leaves[i].isTurning)
+            {   
+                // Returns a random integer from 0 to 2
+                // 0: red color, 1: orange color, 2: yellow color in constructor
+                var randomColorValue = Math.floor(Math.random() * 3);
+                this.leaves[i].fadeForAutumn(randomColorValue);
+            }
         }
-        for (var i = 0; i < this.fruits.length; i++)
+        for (var i = this.fruits.length - 1; i >= 0 ; i--)
         {   
             this.fruits[i].draw();
+            this.fruits[i].fadeOldFruit();
+            if (this.fruits[i].alpha == 0)
+            {
+                this.fruits.splice(i, 1);
+            }
         }
 
         // Functionality for when beat is detected
         if (this.beatDetector.detectBeat() && frameCount > 120)
         {   
+            for (var i = 0; i < this.fruits.length; i++)
+            {
+                this.fruits[i].fall(true);
+            }
+
+            for (var i = 0; i < this.leaves.length; i++)
+            {
+                this.leaves[i].jitter();
+                this.leaves[i].fall(true);
+            }
             // expand the branches and leaves on tree
             if (this.seasonPhase == 0)
             {
@@ -222,8 +336,9 @@ function Tree()
             }
             // grow fruits on the tree
             else if (this.seasonPhase == 2)
-            {
-                if(this.fruits.length < this.leaves.length * 0.3)
+            {   
+                // adds fruits on 20% of end-branches/leaves in the tree
+                if(this.fruits.length < this.leaves.length * 0.2)
                 {   
                     this.addFruits();
                 }
@@ -233,9 +348,76 @@ function Tree()
                 }
             }  
             else if (this.seasonPhase == 3)
+            {   
+                // if all fruits are ripened, change season
+                if (this.fruitsRipened == this.fruits.length)
+                {   
+                    this.seasonPhase = 4;
+                }
+                else
+                {
+                    this.ripenFruits();
+                }
+            }
+            else if (this.seasonPhase == 4)
+            {   
+                var fruitsFallen = this.countFallenFruits();
+                if (fruitsFallen != this.fruits.length)
+                {   
+                   this.dropFruits();
+                }
+                else
+                {
+                    this.seasonPhase = 5;
+                }
+            }  
+            else if (this.seasonPhase == 5)
+            {   
+                console.log('season 5');
+                var leavesTurned = this.countAutumnLeaves();
+                if (leavesTurned < 0.95 * this.leaves.length)
+                {   
+                    this.autumnLeaves();
+                }
+                else
+                {
+                    this.seasonPhase = 6;
+                }
+            }
+            else if (this.seasonPhase == 6)
             {
-                console.log('reached it');
-            }    
+                var leavesFallen = this.countFallenLeaves();
+                if (leavesFallen <= this.leaves.length * 0.5)
+                {   
+                   this.dropLeaves(5);
+                }
+                else if (
+                    leavesFallen > this.leaves.length * 0.5
+                    && leavesFallen < this.leaves.length
+                    )
+                {
+                    this.dropLeaves(20);
+                }
+                else
+                {
+                    this.seasonPhase = 7;
+                }
+            }
+            else if (this.seasonPhase == 7)
+            {
+                console.log('season phase 7');
+            }
+        }
+        else
+        {
+            for (var i = 0; i < this.fruits.length; i++)
+            {
+                this.fruits[i].fall(false);
+            }
+            for (var i = 0; i < this.leaves.length; i++)
+            {
+                this.leaves[i].fall(false);
+            }
         }
     }
 }

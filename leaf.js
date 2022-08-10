@@ -12,6 +12,12 @@ function Leaf(begin)
     this.size = (Math.random() * 5 + 10);
     this.isLightened = false;
     this.hasFruit = false;
+    this.isTurning = false;
+    this.autumn = false;
+    this.isFalling = false;
+    this.fallen = false;
+    this.xSway = Math.random() * 2;
+    this.fallCounter = 0;
 
     this.draw = function()
     {   
@@ -34,5 +40,74 @@ function Leaf(begin)
         this.hasFruit = true;
         var fruit = new Fruit(fruitPos);
         return fruit;
+    }
+
+    this.jitter = function()
+    {
+        var jitterAmount = Math.random() * 2 - 1;
+        this.begin.y = this.begin.y + jitterAmount;
+    }
+
+    this.fadeForAutumn = function(color)
+    {   
+        console.log('color: ' + color);
+        if (this.isTurning)
+        {   
+            // orange
+            if (color == 0)
+            {   
+                this.red = 255;
+                this.green = 140;
+                this.blue = 0;
+            }
+            //red
+            else if (color == 1)
+            {   
+                this.red = 255;
+                this.green = 0;
+                this.blue = 0;
+            }
+            // yellow
+            else
+            {   
+                this.red = 255;
+                this.green = 255;
+                this.blue = 0;
+            }
+            this.autumn = true;
+            this.isTurning = false;
+        }      
+    }
+
+    this.fall = function(isBeat)
+    {   
+        if (this.isFalling && !this.fallen)
+        {   
+            if (this.fallCounter % 40 == 0)
+            {
+                this.xSway *= -1;
+            }
+
+            if (this.begin.y < height)
+            {   
+                this.begin.x += this.xSway;
+
+                if (isBeat)
+                {
+                    this.begin.y += 8;
+                    this.begin.x += this.xSway * 2;
+                }
+                else
+                {  
+                    this.begin.y += Math.random();
+                }
+            }
+            else
+            {
+                this.fallen = true;
+            }
+            
+            this.fallCounter++;
+        }
     }
 }

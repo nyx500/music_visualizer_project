@@ -46,7 +46,7 @@ function Branch(begin, end, thickness)
         /* If the length of the new branch would be < 5, make leaf instead */
         else
         {   
-            var beginLeaf = this.end;
+            var beginLeaf = createVector(this.end.x, this.end.y);
             var leaf = new Leaf(beginLeaf);
             return leaf;
         } 
