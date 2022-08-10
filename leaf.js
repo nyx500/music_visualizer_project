@@ -8,6 +8,7 @@ function Leaf(begin)
     this.red =  Math.random() * 50;
     this.green = Math.random() * 50 + 100;
     this.blue = Math.random() * 50;
+    this.alpha = 200;
     this.angle = Math.random() * PI/2 + -PI/4;
     this.size = (Math.random() * 5 + 10);
     this.isLightened = false;
@@ -46,6 +47,8 @@ function Leaf(begin)
     {
         var jitterAmount = Math.random() * 2 - 1;
         this.begin.y = this.begin.y + jitterAmount;
+        jitterAmount = Math.random() * 2 - 1;
+        this.begin.x = this.begin.x + jitterAmount;
     }
 
     this.fadeForAutumn = function(color)
@@ -110,4 +113,12 @@ function Leaf(begin)
             this.fallCounter++;
         }
     }
+
+    this.fade = function()
+        {
+            if (this.fallen)
+            {
+                this.alpha = max(this.alpha - 1, 0);
+            }
+        }
 }

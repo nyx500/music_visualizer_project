@@ -11,6 +11,8 @@ function Branch(begin, end, thickness)
     this.magnitude = p5.Vector.sub(this.end, this.begin).mag();
     // records whether the branch has spawned other branches/leaves
     this.hasChild = false;
+    this.hasLeaf = false;
+    this.mustGrowLeaf = false;
     // draws the branch
     this.draw = function()
     {   
@@ -48,6 +50,8 @@ function Branch(begin, end, thickness)
         {   
             var beginLeaf = createVector(this.end.x, this.end.y);
             var leaf = new Leaf(beginLeaf);
+            this.mustGrowLeaf = true;
+            this.hasLeaf = true;
             return leaf;
         } 
     }

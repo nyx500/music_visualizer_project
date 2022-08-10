@@ -47,7 +47,7 @@ function Fruit(pos)
                 this.pos.x += Math.random() * 2 - 1;
                 if (isBeat)
                 {
-                    this.pos.y += Math.random() * 3 + 2;
+                    this.pos.y += Math.random() * 5 + 5;
                 }
                 else
                 {  
@@ -61,7 +61,7 @@ function Fruit(pos)
         } 
     }
 
-    this.fadeOldFruit = function()
+    this.fade = function()
     {
         if (this.fallen)
         {
