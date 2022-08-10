@@ -22,7 +22,7 @@ function Leaf(begin)
 
     this.draw = function()
     {   
-        fill(this.red, this.green, this.blue);
+        fill(this.red, this.green, this.blue, this.alpha);
         noStroke();
         // Translates the coordinates from the origin to the middle of the leaf
         // so that the leaf can be rotated around itself
