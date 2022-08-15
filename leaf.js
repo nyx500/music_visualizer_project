@@ -35,8 +35,6 @@ function Leaf(begin)
 
     this.addFruit = function()
     {   
-        let varX = Math.floor(Math.round * 2 + -1);
-        let varY = Math.floor(Math.round * 3 + -1.5);
         let fruitPos = createVector(this.begin.x, this.begin.y);
         this.hasFruit = true;
         var fruit = new Fruit(fruitPos);
