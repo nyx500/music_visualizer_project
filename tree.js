@@ -4,7 +4,7 @@ function Tree()
     this.name='tree';
     /* Set higher constant/sensitivity for beat detector than other visualizations
      because I do not want the tree to change color TOO quickly*/
-    this.beatDetector = new AdvancedBeatDetector(1.11);
+    this.beatDetector = new AdvancedBeatDetector(1.05);
     this.beginLength = 200;
     // Records if the tree is fully grown (-->can now stop adding new branches)
     this.isCompleted = false;
