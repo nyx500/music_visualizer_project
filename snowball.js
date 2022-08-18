@@ -30,9 +30,10 @@ function Snowball(begin)
 
             if (isBeat)
             {   
+                // Shift right by 10 pixels
                 this.begin.x += 10;
-                this.size += 0.3;
 
+                // Flash between blue and white
                 if (this.red == 0)
                 {
                     this.red = 167;
@@ -41,7 +42,6 @@ function Snowball(begin)
                 {
                     this.red = 0;
                 }
-
                 if (this.green == 0)
                 {
                     this.green = 199;

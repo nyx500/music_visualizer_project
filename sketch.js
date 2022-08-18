@@ -54,7 +54,7 @@ var fullScreenImage;
 
 
 function preload(){
-	sound = loadSound('assets/daftPunk.mp3');
+	sound = loadSound('assets/believerDragons.mp3');
 	fullScreenImage = loadImage('assets/fullScreen.png');
 	exitFullScreenImage = loadImage('assets/exitFullScreen.png');
 }
@@ -86,6 +86,7 @@ function setup(){
 	vis.add(new Raindrops());
 	vis.add(new Tree());
 	vis.add(new Hearts());
+	vis.add(new PastelRoom());
 	
 	
 	// create array of visuals names to put in GUI
