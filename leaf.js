@@ -43,15 +43,14 @@ function Leaf(begin)
 
     this.jitter = function()
     {
-        var jitterAmount = Math.random() * 2 - 1;
-        this.begin.y = this.begin.y + jitterAmount;
-        jitterAmount = Math.random() * 2 - 1;
-        this.begin.x = this.begin.x + jitterAmount;
+        var jitterAmountY = Math.random() * 2 - 1;
+        this.begin.y = this.begin.y + jitterAmountY;
+        jitterAmountX = Math.random() * 4 - 2;
+        this.begin.x = this.begin.x + jitterAmountX;
     }
 
     this.fadeForAutumn = function(color)
     {   
-        console.log('color: ' + color);
         if (this.isTurning)
         {   
             // orange

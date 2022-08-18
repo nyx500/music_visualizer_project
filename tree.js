@@ -4,7 +4,7 @@ function Tree()
     this.name='tree';
     /* Set higher constant/sensitivity for beat detector than other visualizations
      because I do not want the tree to change color TOO quickly*/
-    this.beatDetector = new AdvancedBeatDetector(1.16);
+    this.beatDetector = new AdvancedBeatDetector(1.11);
     this.beginLength = 200;
     // Records if the tree is fully grown (-->can now stop adding new branches)
     this.isCompleted = false;
@@ -30,6 +30,7 @@ function Tree()
     this.fruitsRipened = 0;
     this.fruitsFallen = 0;
     this.maxLeafCount = 0;
+    this.snowballs = [];
 
     /* Checks if an object returned by the Branch constructor's
     addBranch method is a leaf or another branch, 
@@ -197,6 +198,18 @@ function Tree()
         }
     }
 
+    this.addSnowballs = function(num)
+    {   
+        for (var i = 0; i < num; i++)
+        {   
+            var x_coord = Math.random() * (width + 200) - 200;
+            var y_coord = (Math.random() * height) - height;
+            var snowballVector = createVector(x_coord, y_coord);
+            var snowball = new Snowball(snowballVector);
+            this.snowballs.push(snowball);
+        }
+    }
+
     // ripens fruits in the whole fruit array by
     // gradually changing color every time it's called
     this.ripenFruits = function()
@@ -294,10 +307,12 @@ function Tree()
         colorMode(RGB);
         strokeCap(PROJECT);
 
+
         for (var i = 0; i < this.branches.length; i++)
         {   
             this.branches[i].draw();
         }
+
         for (var i = this.leaves.length - 1; i >= 0; i--)
         {   
             this.leaves[i].draw();
@@ -323,6 +338,17 @@ function Tree()
             if (this.fruits[i].alpha == 0)
             {
                 this.fruits.splice(i, 1);
+            }
+        }
+
+        
+        for (var i = this.snowballs.length - 1; i >= 0; i--)
+        {   
+            this.snowballs[i].draw();
+            this.snowballs[i].fall(this.beatDetector.detectBeat());
+            if (this.snowballs[i].fallen)
+            {
+                this.snowballs.splice(i, 1);
             }
         }
 
@@ -358,6 +384,7 @@ function Tree()
                 {
                     this.lightenLeaves();
                 }
+                
             }
             // grow fruits on the tree
             else if (this.seasonPhase == 2)
@@ -375,7 +402,6 @@ function Tree()
             }  
             else if (this.seasonPhase == 3)
             {   
-                console.log('3');
                 // if all fruits are ripened, change season
                 if (this.fruitsRipened == this.fruits.length)
                 {   
@@ -389,7 +415,6 @@ function Tree()
             else if (this.seasonPhase == 4)
             {   
                 this.fruitsRipened = 0;
-                console.log('4');
                 var fruitsFallen = this.countFallenFruits();
                 if (fruitsFallen != this.fruits.length)
                 {   
@@ -402,7 +427,6 @@ function Tree()
             }  
             else if (this.seasonPhase == 5)
             {   
-                console.log('season 5');
                 var leavesTurned = this.countAutumnLeaves();
                 if (leavesTurned < 0.95 * this.leaves.length)
                 {   
@@ -414,8 +438,9 @@ function Tree()
                 }
             }
             else if (this.seasonPhase == 6)
-            {
+            {   
                 var leavesFallen = this.countFallenLeaves();
+
                 if (leavesFallen <= this.leaves.length * 0.5)
                 {   
                    this.dropLeaves(5);
@@ -424,7 +449,7 @@ function Tree()
                     leavesFallen > this.leaves.length * 0.5
                     && leavesFallen < this.leaves.length
                     )
-                {
+                {   
                     this.dropLeaves(20);
                 }
                 else
@@ -440,16 +465,30 @@ function Tree()
                 }
             }
             else if (this.seasonPhase == 7)
-            {
+            {   
+                
+                console.log('phase 7');
+
                 if (this.leaves.length == 0)
-                {
+                {   
+                    console.log('leaves = 0');
                     this.seasonPhase = 8;
                 }
             }
             else if (this.seasonPhase == 8)
-            {
+            {   
+                console.log('phase 8');
+
+                if (this.snowballs.length == 0)
+                {   
+                    console.log('this.snowballs has 0 items in it');
+                    this.seasonPhase = 9;
+                }
+            }
+            else if (this.seasonPhase == 9)
+            {   
+                console.log('phase 9');
                 this.regrowLeaves();
-                console.log(this.leaves.length, this.maxLeafCount);
                 if (this.leaves.length == this.maxLeafCount)
                 {
                     this.seasonPhase = 1;
@@ -470,5 +509,55 @@ function Tree()
                 this.leaves[i].fall(false);
             }
         }
+
+        if (
+            this.seasonPhase == 7
+        )
+        {   
+            if (this.leaves.length >= 100)
+            {
+                this.addSnowballs(50);
+            }
+            else if (this.leaves.length < 100 > this.leaves.length > 50 )
+            {
+                if (frameCount % 2 == 0)
+                {
+                    this.addSnowballs(5);
+                }
+            }
+            else
+            {
+                if (frameCount % 3 == 0)
+                {
+                    this.addSnowballs(1);
+                }
+            }
+        }
+
+        
+        textSize(40);
+        if (this.seasonPhase == 1 || this.seasonPhase == 2 ||
+             this.seasonPhase == 9)
+        {
+            
+            fill(40, 255, 60);
+            text('Spring', 20, height - 50);
+        }
+        else if (this.seasonPhase == 3 || this.seasonPhase == 4)
+        {
+            fill(255, 255, 50);
+            text('Summer', 20, height - 50);
+        }
+        else if (this.seasonPhase == 5 || this.seasonPhase == 6)
+        {
+            fill(255, 160, 0);
+            text('Autumn', 20, height - 50);
+        }
+        else
+        {
+            fill(100, 100, 255);
+            text('Winter', 20, height - 50);
+        }
+
     }
 }
