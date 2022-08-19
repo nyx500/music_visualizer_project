@@ -51,7 +51,7 @@ class BabyStar{
 /*Attribution: adapted code from https://p5js.org/examples/form-star.html */
 class OriginStar{
     constructor(numPoints)
-    {
+    {   
         this.x_pos = width/2;
         this.y_pos = height/2;
         this.numPoints = numPoints;
@@ -70,24 +70,29 @@ class OriginStar{
 
     draw()
     {   
+
         fill(this.color);
         noStroke();
         
         beginShape()
         for (let a = 0; a < this.angles.length; a++)
         {       
-        
+                var y_position = this.y_pos;
+
+                // moves origin star down slightlys if fullscreen
+                // otherwise it will be too far above the origin of the little stars
+                if (fullscreenMode)
+                {
+                    y_position = this.y_pos + 70;
+                }
+
                 let smallCirclePointX = this.x_pos + cos(this.angles[a]) * this.littleRadius;
-                let smallCirclePointY = this.y_pos + sin(this.angles[a]) * this.littleRadius;
+                let smallCirclePointY = y_position + sin(this.angles[a]) * this.littleRadius;
                 vertex(smallCirclePointX, smallCirclePointY);
             
                 let bigCirclePointX = this.x_pos + cos(this.angles[a]) * this.bigRadius;
-                let bigCirclePointY = this.y_pos + sin(this.angles[a]) * this.bigRadius;
+                let bigCirclePointY = y_position + sin(this.angles[a]) * this.bigRadius;
                 vertex(bigCirclePointX, bigCirclePointY);
-                
-                // smallCirclePointX = this.x_pos + cos(this.angles[a + 1]) * this.littleRadius;
-                // smallCirclePointY = this.y_pos + sin(this.angles[a + 1]) * this.littleRadius;
-                // vertex(smallCirclePointX, smallCirclePointY);
         }
         endShape();
     }

@@ -12,6 +12,8 @@ var vis = null;
 var sound = null;
 //variable for p5 fast fourier transform
 var fourier;
+// checks if mode is fullscreen
+var fullscreenMode = false;
 // visuals details gui
 var gui;
 // chooseVisual gui
@@ -54,7 +56,7 @@ var fullScreenImage;
 
 
 function preload(){
-	sound = loadSound('assets/believerDragons.mp3');
+	sound = loadSound('assets/moonlightShadow.mp3');
 	fullScreenImage = loadImage('assets/fullScreen.png');
 	exitFullScreenImage = loadImage('assets/exitFullScreen.png');
 }

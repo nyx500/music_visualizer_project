@@ -29,6 +29,7 @@ function FullScreenButton(){
 		if(mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height){
             let fs = fullscreen();
             fullscreen(!fs);
+			fullscreenMode = !fullscreenMode;
 		}
 	};
 

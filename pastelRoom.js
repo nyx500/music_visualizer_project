@@ -1,3 +1,10 @@
+// Attribution: inspired by this video https://www.youtube.com/watch?v=GD0aorbX3Wk
+// However, I didn't look at the code on GitHub until I had coded this,
+// I was solely influenced by the aesthetics and used different principles
+// in the code to the ones used in the GitHub repository for this video -
+// I only compared them later, and the visualizations are based on
+// completely different logic and functionality
+
 function PastelShape(v1, v2, v3, c, a, s)
 {
     this.vector1 = v1;
@@ -37,7 +44,13 @@ function PastelShape(v1, v2, v3, c, a, s)
 function PastelRoom() {
     this.name = 'pastelroom';
     this.angle = 0.01;
-    this.beatDetector = new AdvancedBeatDetector(1.2);
+    this.beatDetector = new BassBeatDetector();
+    this.flashColors = ['mediumpurple', 'mediumturquoise', 'mistyrose',
+                        'paleturquoise', 'rosybrown', 'salmon', 'wheat',
+                        'papayawhip', 'peachpuff', 'lightgreen', 'lemonchiffon',
+                        'lavender', 'gray', 'coral', 'orange', 'thistle',
+                        'yellow', 'lightblue', 'gold', 'lightgrey', 'lightpurple'
+                         ]
 
     this.makePastelShapes = function(){
 
@@ -123,12 +136,18 @@ function PastelRoom() {
             {   
                 if (this.pastelShapes[i].angle > 0)
                 {
-                    this.pastelShapes[i].angle += 0.05;
+                    this.pastelShapes[i].angle += 1;
                 }
                 else
                 {
-                    this.pastelShapes[i].angle -= 0.05;
+                    this.pastelShapes[i].angle -= 1;
                 }
+
+                /* change the color of the shape when a beat is detected
+                by choosing a random color from the this.colors array*/
+                let randomColorIndex = Math.floor(Math.random() * this.flashColors.length);
+                let randomColor = this.flashColors[randomColorIndex];
+                this.pastelShapes[i].color = randomColor;
             }
         }
         else
