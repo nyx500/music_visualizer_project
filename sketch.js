@@ -14,10 +14,11 @@ var sound = null;
 var fourier;
 // checks if mode is fullscreen
 var fullscreenMode = false;
-// visuals details gui
-var gui;
 // chooseVisual gui
 var guiChooseVisual;
+// General Gui text heading
+var generalText = 'Show/hide using space bar!'
+var visGuiShowing = true;
 
 var pickVisual;
 
@@ -155,15 +156,14 @@ function setup(){
 					'pianoColor2',
 					'spinSpeed'
 				  );
-	
-	
+	gui.hide();
 
 	vis.selectVisual(pickVisual.toLowerCase());
-
 }
 
 function draw(){
 	colorMode(RGB);
+	toggleGuis();
 	vis.selectVisual(pickVisual.toLowerCase());
 	//draw the selected visualisation
 	vis.selectedVisual.draw();
@@ -186,5 +186,32 @@ function windowResized(){
 	resizeCanvas(windowWidth, windowHeight);
 	if(vis.selectedVisual.hasOwnProperty('onResize')){
 		vis.selectedVisual.onResize();
+	}
+}
+
+// Chooses which Gui to display for which visualization
+function toggleGuis()
+{	
+	if (vis.selectedVisual.gui == null)
+	{	
+		for (var i = 0; i < vis.visuals.length; i++)
+		{
+			if (vis.visuals[i].gui != null)
+			{
+				vis.visuals[i].hideGui();
+			}
+		}
+	}
+	else
+	{	
+		// Checks if space bar has been pressed to hide/show the GUI
+		if (visGuiShowing)
+		{
+			vis.selectedVisual.showGui();
+		}
+		else
+		{
+			vis.selectedVisual.hideGui();
+		}
 	}
 }

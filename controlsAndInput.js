@@ -14,22 +14,19 @@ function ControlsAndInput(){
 		this.playbackButton.hitCheck();
 	};
 
-	this.guiOpen = true;
 
-	// checks if space code pressed and toggles the visualizations settings gui
+	// Checks if space code pressed and toggles the visualization gui
 	this.keyPressed = function(){
 		if (keyCode == 32)
 		{	
-			if (this.guiOpen)
-			{
-				gui.hide();
+			if(visGuiShowing)
+			{	
+				visGuiShowing = false;
 			}
 			else
 			{
-				gui.show();
+				visGuiShowing = true;
 			}
-			
-			this.guiOpen = !this.guiOpen;
 		}
 	}
 

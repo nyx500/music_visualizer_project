@@ -1,6 +1,7 @@
 function FreqPlot()
 {
     this.name = 'freqplot';
+    this.gui = null;
     this.plotX = width * 0.35;
     this.plotY = height * 2/3;
     this.plotYTop = this.plotY - 255;

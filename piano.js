@@ -1,6 +1,7 @@
 // maps fourier.analyze() frequency amplitude values to notes on a piano
 function Piano(){
     this.name = "piano";
+    this.gui = null;
     this.octaves;
     var mapped_array;
 

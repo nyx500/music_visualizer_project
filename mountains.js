@@ -5,6 +5,7 @@
 function Mountains()
 {
     this.name = "mountains";
+    this.gui = null;
     this.prog = 0;
     // private variables - only needed inside the function
     var lowest;

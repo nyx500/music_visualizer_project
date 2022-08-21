@@ -2,6 +2,7 @@
 function WavePattern() {
 	//vis name
 	this.name = "wavepattern";
+	this.gui = null;
 
 	//draw the wave form to the screen
 	this.draw = function() {

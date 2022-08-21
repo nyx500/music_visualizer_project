@@ -43,6 +43,7 @@ function PastelShape(v1, v2, v3, c, a, s)
 
 function PastelRoom() {
     this.name = 'pastelroom';
+    this.gui = null;
     this.angle = 0.01;
     this.beatDetector = new BassBeatDetector();
     this.flashColors = ['mediumpurple', 'mediumturquoise', 'mistyrose',

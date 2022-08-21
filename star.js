@@ -3,10 +3,12 @@
 function Star() {
 
     this.name = 'star';
+    this.gui = null;
     this.spectrum = fourier.analyze();
     this.prog = 0;
     this.amp = new p5.Amplitude();
     this.binArray;
+
 
     // populates the bins array each time fourier.analyze() is called
     // returns array of frequency bins

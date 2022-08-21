@@ -14,6 +14,7 @@
 function RidgePlots() {
 	//vis name
 	this.name = "ridgeplots";
+    this.gui = null;
     // private variables because only need to be accessed in this constructor function
     var output = [];
     // the left edge of the plot

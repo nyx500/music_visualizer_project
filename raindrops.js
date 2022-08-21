@@ -4,6 +4,7 @@ https://editor.p5js.org/samchasan/sketches/SJfzWJviW
 function Raindrops()
 {
     this.name = "raindrops";
+    this.gui = null;
     this.drops =[];
     this.advancedBeatDetector = new AdvancedBeatDetector(1.165);
     this.plot = new FreqPlot();

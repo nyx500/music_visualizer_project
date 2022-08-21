@@ -1,8 +1,34 @@
+
+    // adjust smoothness of FFT analyze
+    var smoothingFactor;
+    var smoothingFactorMin;
+    var smoothingFactorgMax;
+    var smoothingFactorStep;
+
+    smoothingFactor = 0.8;
+    smoothingFactorMin = 0.1;
+    smoothingFactorMax = 0.95;
+    smoothingFactorStep = 0.05;
+
 function Circle() {
 
     this.name = 'circle';
     this.spectrum = fourier.analyze();
     this.prog = 0;
+    
+    this.gui = createGui('Circle Visualization: ' + generalText);
+    this.gui.setPosition(width * 0.8, 30);
+    this.gui.addGlobals('smoothingFactor');
+
+    this.hideGui = function()
+    {   
+        this.gui.hide();
+    }
+
+    this.showGui = function()
+    {   
+        this.gui.show();
+    }
 
     // draws a circle for different frequency section
     this.drawCircle = function(lowerFreqLimit, upperFreqLimit, lowerRadius, upperRadius,

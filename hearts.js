@@ -65,6 +65,7 @@ function Heart(x, y, c, bin, strokeOrFill) {
 
 function Hearts() {
     this.name = 'hearts';
+    this.gui = null;
     // rows and columns of small hearts will be stored in this 2d array
     this.heartsMatrix = [];
     // one big heart in center of screen which will have size mapped to amplitude

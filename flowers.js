@@ -1,6 +1,7 @@
 function Flowers()
 {
     this.name = "flowers";
+    this.gui = null;
     // linAverages will be an array that stores 16 frequency bands after calling fourier.analyze()
     var linAverages;
     // angle of each petal around the center of the flower

@@ -1,6 +1,6 @@
 function Spectrum(){
 	this.name = "spectrum";
-
+	this.gui = null;
 	this.draw = function(){
 		
 		push();

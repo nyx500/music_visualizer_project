@@ -1,6 +1,7 @@
 function Needles() {
 	//name of the visualisation
 	this.name = "needles";
+	this.gui = null;
 
 	//how large is the arc of the needle plot.
 	var minAngle = PI + PI / 10;

@@ -102,6 +102,7 @@ function Starfield()
 {   
     colorMode(HSB, 255);
     this.name = 'starfield';
+    this.gui = null;
     this.stars = [];
     this.advancedBeatDetector = new AdvancedBeatDetector(1.165);
     this.origin_star = new OriginStar(50);

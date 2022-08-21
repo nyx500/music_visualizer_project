@@ -2,6 +2,7 @@
 function Tree()
 {
     this.name='tree';
+    this.gui = null;
     /* Set higher constant/sensitivity for beat detector than other visualizations
      because I do not want the tree to change color TOO quickly*/
     this.beatDetector = new AdvancedBeatDetector(1.05);
