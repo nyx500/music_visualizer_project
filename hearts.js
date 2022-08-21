@@ -191,7 +191,9 @@ function Hearts() {
     }
 
     this.draw = function(){
-        for (var i = 0; i < this.heartsMatrix.length; i++)
+        if (sound.isPlaying())
+        {
+            for (var i = 0; i < this.heartsMatrix.length; i++)
         {   
             for (var j = 0; j < this.heartsMatrix[i].length; j++)
             {   
@@ -222,5 +224,6 @@ function Hearts() {
             this.centralHeart.radius = 25;
         }
         this.centralHeart.draw();
+        }
     }
 }

@@ -1,7 +1,46 @@
+
+// Can adjust number of flowers in Flowers vis
+var numFlowers;
+var numFlowersMin;
+var numFlowersMax;
+var numFlowersStep;
+
+// adjust petal number
+var numberOfPetals;
+var numberOfPetalsMin;
+var numberOfPetalsMax;
+var numberOfPetalsStep;
+
+numFlowers = 8;
+numFlowersMin = 1;
+numFlowersMax = 16;
+numFlowersStep = 1;
+
+numberOfPetals = 8;
+numberOfPetalsMin = 4;
+numberOfPetalsMax = 12;
+numberOfPetalsStep = 2;
+
 function Flowers()
 {
     this.name = "flowers";
-    this.gui = null;
+    this.gui = createGui('Flowers Visualization: ' + generalText);
+    this.gui.setPosition(width * 0.8, 30);
+    this.gui.addGlobals(
+        'numFlowers',
+        'numberOfPetals');
+
+    
+    this.hideGui = function()
+    {   
+        this.gui.hide();
+    }
+
+    this.showGui = function()
+    {   
+        this.gui.show();
+    }
+
     // linAverages will be an array that stores 16 frequency bands after calling fourier.analyze()
     var linAverages;
     // angle of each petal around the center of the flower

@@ -1,9 +1,20 @@
 // Attribution: inspired by this video https://www.youtube.com/watch?v=GD0aorbX3Wk
 // However, I didn't look at the code on GitHub until I had coded this,
-// I was solely influenced by the aesthetics and used different principles
+// I was just influenced by the aesthetics and then I used different principles
 // in the code to the ones used in the GitHub repository for this video -
 // I only compared them later, and the visualizations are based on
 // completely different logic and functionality
+
+// adjust petal number
+var rotationAngle;
+var rotationAngleMin;
+var rotationAngleMax;
+var rotationAngleStep;
+
+rotationAngle = 0.01;
+rotationAngleMin = 0.005;
+rotationAngleMax = 0.03;
+rotationAngleStep = 0.005;
 
 function PastelShape(v1, v2, v3, c, a, s)
 {
@@ -14,7 +25,7 @@ function PastelShape(v1, v2, v3, c, a, s)
     this.angle = a;
     this.scale = s;
 
-    this.draw = function(ang)
+    this.draw = function()
     {   
         push();
         translate(width / 2, height /2);
@@ -43,8 +54,20 @@ function PastelShape(v1, v2, v3, c, a, s)
 
 function PastelRoom() {
     this.name = 'pastelroom';
-    this.gui = null;
-    this.angle = 0.01;
+    this.gui = createGui('PastelRoom Visualization: ' + generalText);
+    this.gui.setPosition(width * 0.8, 30);
+    this.gui.addGlobals(
+        'rotationAngle');
+      
+    this.hideGui = function()
+    {   
+        this.gui.hide();
+    }
+
+    this.showGui = function()
+    {   
+        this.gui.show();
+    }
     this.beatDetector = new BassBeatDetector();
     this.flashColors = ['mediumpurple', 'mediumturquoise', 'mistyrose',
                         'paleturquoise', 'rosybrown', 'salmon', 'wheat',
@@ -157,11 +180,11 @@ function PastelRoom() {
             {   
                 if (this.pastelShapes[i].angle > 0)
                 {
-                    this.pastelShapes[i].angle += 0.01;
+                    this.pastelShapes[i].angle += rotationAngle;
                 }
                 else
                 {
-                    this.pastelShapes[i].angle -= 0.01;
+                    this.pastelShapes[i].angle -= rotationAngle;
                 }
             }
         }

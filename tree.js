@@ -1,11 +1,37 @@
+// adjust petal number
+var treeBeatSensitivity;
+var treeBeatSensitivityMin;
+var treeBeatSensitivityMax;
+var treeBeatSensitivityStep;
+
+treeBeatSensitivity = 1.05;
+treeBeatSensitivityMin = 1.015;
+treeBeatSensitivityMax = 1.115;
+treeBeatSensitivityStep = 0.001;
+
 /*Attribution: https://www.youtube.com/watch?v=0jjeOYMjmDU */
 function Tree()
 {
     this.name='tree';
-    this.gui = null;
+    this.gui = createGui('Tree Visualization: ' + generalText);
+    this.gui.setPosition(width * 0.8, 30);
+    this.gui.addGlobals(
+        'treeBeatSensitivity');
+      
+    this.hideGui = function()
+    {   
+        this.gui.hide();
+    }
+
+    this.showGui = function()
+    {   
+        this.gui.show();
+    }
+    
+
     /* Set higher constant/sensitivity for beat detector than other visualizations
      because I do not want the tree to change color TOO quickly*/
-    this.beatDetector = new AdvancedBeatDetector(1.05);
+    this.beatDetector = new AdvancedBeatDetector();
     this.beginLength = 200;
     // Records if the tree is fully grown (-->can now stop adding new branches)
     this.isCompleted = false;
@@ -346,7 +372,7 @@ function Tree()
         for (var i = this.snowballs.length - 1; i >= 0; i--)
         {   
             this.snowballs[i].draw();
-            this.snowballs[i].fall(this.beatDetector.detectBeat());
+            this.snowballs[i].fall(this.beatDetector.detectBeat(treeBeatSensitivity));
             if (this.snowballs[i].fallen)
             {
                 this.snowballs.splice(i, 1);
@@ -354,7 +380,7 @@ function Tree()
         }
 
         // Functionality for when beat is detected
-        if (this.beatDetector.detectBeat() && frameCount > 120)
+        if (this.beatDetector.detectBeat(treeBeatSensitivity) && frameCount > 120)
         {   
             for (var i = 0; i < this.fruits.length; i++)
             {   

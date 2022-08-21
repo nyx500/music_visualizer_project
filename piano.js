@@ -1,9 +1,52 @@
+// adjust piano threshold
+var pianoSensitivityLimit;
+var pianoSensitivityLimitMin;
+var pianoSensitivityLimitMax;
+var pianoSensitivityLimitStep;
+
+pianoSensitivityLimit = 201;
+pianoSensitivityLimitMin = 170;
+pianoSensitivityLimitMax = 250;
+pianoSensitivityLimitStep = 1;
+
+
+var bins;
+bins = [1024, 512, 256, 128, 64];
+
+var pianoColor1 = [
+    'lightgray','red', 'aqua', 'blueviolet',
+    'darkblue', 'gold', 'lightpink',
+    'plum','orange', 
+];
+var pianoColor2 = [
+    'darkslategray', 'crimson', 'mediumorchid', 'mediumaquamarine',
+    'yellow', 'lightgreen', 'lightslategrey', 'steelblue',
+    'saddlebrown', 'turquoise', 'violet'
+]
+
+
 // maps fourier.analyze() frequency amplitude values to notes on a piano
 function Piano(){
     this.name = "piano";
-    this.gui = null;
     this.octaves;
     var mapped_array;
+
+    this.gui = createGui('Piano Visualization: ' + generalText);
+    this.gui.setPosition(width * 0.8, 30);
+    this.gui.addGlobals('pianoSensitivityLimit',
+                        'bins',
+                        'pianoColor1',
+                        'pianoColor2');
+
+    this.hideGui = function()
+    {   
+        this.gui.hide();
+    }
+
+    this.showGui = function()
+    {   
+        this.gui.show();
+    }
 
     /*  an array of seven objects storing the frequencies of all the notes a piano, 
     divided into objects storing the frequencies for every note in each octave*/
@@ -163,16 +206,16 @@ function Piano(){
     {
         for (var i = 0; i < mapped_array.length; i++)
         {
-            /* the global variable pianoEnergyLimit sets how loud frequency has to
+            /* the global variable pianoSensitivityLimit sets how loud frequency has to
              be for each note to be highlighted */
-            if (mapped_array[i].energy > pianoEnergyLimit)
+            if (mapped_array[i].energy > pianoSensitivityLimit)
             {   
                 for (var j = 0; j < this.octaves.length; j++)
                 {
                     for (var k = 0; k < this.octaves[j].length; k++)
                     {   
                         /* changes the color of a key if its corresponding frequency
-                        in mapped_array is louder than the pianoEnergyLimit value */
+                        in mapped_array is louder than the pianoSensitivityLimit value */
                         if (Math.abs(mapped_array[i].frequency - this.octaves[j][k].frequency) <= 1)
                         {   
                             if (this.octaves[j][k].color == "white")

@@ -1,9 +1,27 @@
+
+var spinSpeed;
+spinSpeed = [1, 2, 3, 4];
+
+
 // draws a star with each 'arm' representing one of 5 frequency bins
 // each arm is a different color in order to distinguish the frequency bins
 function Star() {
 
     this.name = 'star';
-    this.gui = null;
+    this.gui = createGui('Star Visualization: ' + generalText);
+    this.gui.setPosition(width * 0.8, 30);
+    this.gui.addGlobals('spinSpeed');
+
+    this.hideGui = function()
+    {   
+        this.gui.hide();
+    }
+
+    this.showGui = function()
+    {   
+        this.gui.show();
+    }
+
     this.spectrum = fourier.analyze();
     this.prog = 0;
     this.amp = new p5.Amplitude();

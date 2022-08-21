@@ -1,3 +1,15 @@
+// adjust petal number
+var starfieldBeatSensitivity;
+var starfieldBeatSensitivityMin;
+var starfieldBeatSensitivityMax;
+var starfieldBeatSensitivityStep;
+
+starfieldBeatSensitivity = 1.165;
+starfieldBeatSensitivityMin = 1.015;
+starfieldBeatSensitivityMax = 1.2;
+starfieldBeatSensitivityStep = 0.001;
+
+
 /* TODO: cap the size so stars don't get too huge when they come close using constrain
 - alter the brightness so it's more noticeable - get the beat - watch beat analyzer video - program 
 stars to the beat to accelerate more than once if beat happens --> DONE */
@@ -102,9 +114,22 @@ function Starfield()
 {   
     colorMode(HSB, 255);
     this.name = 'starfield';
-    this.gui = null;
+    this.gui = createGui('Starfield Visualization: ' + generalText);
+    this.gui.setPosition(width * 0.8, 30);
+    this.gui.addGlobals(
+        'starfieldBeatSensitivity');
+      
+    this.hideGui = function()
+    {   
+        this.gui.hide();
+    }
+
+    this.showGui = function()
+    {   
+        this.gui.show();
+    }
     this.stars = [];
-    this.advancedBeatDetector = new AdvancedBeatDetector(1.165);
+    this.advancedBeatDetector = new AdvancedBeatDetector();
     this.origin_star = new OriginStar(50);
     this.countFramesForThisVisualization = 0;
 
@@ -190,7 +215,7 @@ function Starfield()
             this.updateStars();
         }
 
-        var isBeat = this.advancedBeatDetector.detectBeat();
+        var isBeat = this.advancedBeatDetector.detectBeat(starfieldBeatSensitivity);
 
 
         /* Only start representing beat after 1.3 seconds --> the beat detector needs time

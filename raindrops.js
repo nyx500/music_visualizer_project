@@ -6,7 +6,7 @@ function Raindrops()
     this.name = "raindrops";
     this.gui = null;
     this.drops =[];
-    this.advancedBeatDetector = new AdvancedBeatDetector(1.165);
+    this.advancedBeatDetector = new AdvancedBeatDetector();
     this.plot = new FreqPlot();
 
     this.createDrop = function(x, y, size)
@@ -47,7 +47,7 @@ function Raindrops()
         background(nyc);
         fill(50, 50, 50, 220);
         rect(0, 0, width, height);
-        var isBeat = this.advancedBeatDetector.detectBeat();
+        var isBeat = this.advancedBeatDetector.detectBeat(1.165);
 
         background(80, 80, 80, 100);
         if (sound.isPlaying())

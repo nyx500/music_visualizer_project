@@ -19,39 +19,8 @@ var guiChooseVisual;
 // General Gui text heading
 var generalText = 'Show/hide using space bar!'
 var visGuiShowing = true;
-
 var pickVisual;
 
-// can adjust number of flowers in corresponding visualization
-var numFlowers;
-var numFlowersMin;
-var numFlowersMax;
-var numFlowersStep;
-
-// adjust petal number
-var numberOfPetals;
-var numberOfPetalsMin;
-var numberOfPetalsMax;
-var numberOfPetalsStep;
-
-// adjust piano threshold
-var pianoEnergyLimit;
-var pianoEnergyLimitMin;
-var pianoEnergyLimitMax;
-var pianoEnergyLimitStep;
-
-// adjust smoothness of FFT analyze
-var smoothingFactor;
-var smoothingFactorMin;
-var smoothingFactorgMax;
-var smoothingFactorStep;
-
-var pianoColor1;
-var pianoColor2;
-
-var bins;
-
-var spinSpeed;
 
 var fullScreenImage;
 
@@ -101,62 +70,11 @@ function setup(){
 		pickVisual.push(capitalizedName);
 	}
 
-	numFlowers = 8;
-	numFlowersMin = 1;
-	numFlowersMax = 16;
-	numFlowersStep = 1;
-
-	numberOfPetals = 8;
-	numberOfPetalsMin = 4;
-	numberOfPetalsMax = 12;
-	numberOfPetalsStep = 2;
-
-	pianoEnergyLimit = 150;
-	pianoEnergyLimitMin = 100;
-	pianoEnergyLimitMax = 240;
-	pianoEnergyLimitStep = 5;
-
-	smoothingFactor = 0.8;
-	smoothingFactorMin = 0.1;
-	smoothingFactorMax = 0.95;
-	smoothingFactorStep = 0.05;
-
-	bins = [1024, 512, 256, 128, 64];
-
-
-	pianoColor1 = [
-					'red', 'aqua', 'blueviolet',
-					'darkblue', 'gold', 'lightpink',
-					'plum','orange', 'lightgray'
-				];
-	pianoColor2 = [
-					'crimson', 'mediumorchid', 'mediumaquamarine',
-					'yellow', 'lightgreen', 'lightslategrey', 'steelblue',
-					'saddlebrown', 'turquoise', 'violet'
-				]
-
-
-    spinSpeed = [1, 2, 3, 4];
-
 	guiChooseVisual = createGui('Choose a Visual...');
 	guiChooseVisual.setPosition(100, 20);
 	guiChooseVisual.addGlobals(
 		'pickVisual',
 	);
-
-	gui = createGui('Audio Visualizer - Press the space key to show/hide this menu!');
-	gui.setPosition(width * 0.8, 30);
-	gui.addGlobals( 
-					'smoothingFactor',
-					'bins',
-					'numFlowers',
-					'numberOfPetals',
-					'pianoEnergyLimit',
-					'pianoColor1',
-					'pianoColor2',
-					'spinSpeed'
-				  );
-	gui.hide();
 
 	vis.selectVisual(pickVisual.toLowerCase());
 }
@@ -189,11 +107,13 @@ function windowResized(){
 	}
 }
 
-// Chooses which Gui to display for which visualization
+// Displays or hides GUIs for user input for all visualizations that have one
 function toggleGuis()
 {	
+	// Current visualization does not have a GUI
 	if (vis.selectedVisual.gui == null)
 	{	
+		// Hide all other GUIs for other visualizations
 		for (var i = 0; i < vis.visuals.length; i++)
 		{
 			if (vis.visuals[i].gui != null)
@@ -202,16 +122,34 @@ function toggleGuis()
 			}
 		}
 	}
+	// Current visualization has a GUI
 	else
 	{	
-		// Checks if space bar has been pressed to hide/show the GUI
-		if (visGuiShowing)
+		for (var i = 0; i < vis.visuals.length; i++)
 		{
-			vis.selectedVisual.showGui();
-		}
-		else
-		{
-			vis.selectedVisual.hideGui();
+			if (vis.visuals[i].gui != null)
+			{	
+				// Hide GUIs of other visualizations
+				if (vis.visuals[i] != vis.selectedVisual)
+				{	
+					vis.visuals[i].hideGui();
+				}
+			}
+			else
+			{
+				// Checks if "visGuiShowing" global is set to true
+				/* "visuGuiShowing" is toggled true/false in controlsAndInput
+					by pressing the Space key
+				*/
+				if (visGuiShowing)
+				{	
+					vis.selectedVisual.showGui();
+				}
+				else
+				{
+					vis.selectedVisual.hideGui();
+				}
+			}
 		}
 	}
 }

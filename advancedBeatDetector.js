@@ -1,5 +1,5 @@
 /* Attribution: http://archive.gamedev.net/archive/reference/programming/features/beatdetection/index.html */
-function AdvancedBeatDetector(sensitivity) {
+function AdvancedBeatDetector() {
     this.name = 'advancedBeatDetector';
     // 'sampleBuffers' stores the energies for each of 5 frequency ranges
     this.sampleBuffersCollection = [
@@ -39,8 +39,6 @@ function AdvancedBeatDetector(sensitivity) {
     // must be a power of 2 less than 1024 (total fft spectrum has 1024 freqs)
     this.numSubBands = this.sampleBuffersCollection.length;
     this.numFrequenciesInBuffer = 1024/this.numSubBands;
-    this.sensitivity = sensitivity;
-
     // default frame rate set to 60
     this.frameRate = 60;
 
@@ -94,7 +92,7 @@ function AdvancedBeatDetector(sensitivity) {
         return maxIndex;
     }
 
-    this.checkBufferForBeat = function(index)
+    this.checkBufferForBeat = function(index, threshold)
     {
         var name = this.sampleBuffersCollection[index].name;
 
@@ -111,9 +109,8 @@ function AdvancedBeatDetector(sensitivity) {
                 themselves in between two bounds of reasonable values that would enable
                 a constant best suited to the song.
             */
-        var c = this.sensitivity;
 
-        if (fourier.getEnergy(name) > this.sampleBuffersCollection[index].sampleAverage * c)
+        if (fourier.getEnergy(name) > this.sampleBuffersCollection[index].sampleAverage * threshold)
         {   
             return true;
         }
@@ -124,7 +121,7 @@ function AdvancedBeatDetector(sensitivity) {
 
     }
     
-    this.checkBuffersForBeat = function()
+    this.checkBuffersForBeat = function(threshold)
     {   
         
         fourier.analyze();
@@ -158,17 +155,17 @@ function AdvancedBeatDetector(sensitivity) {
         data for the variance needs to be gathered before the beat
         detector starts to be reliable
         */
-        beat =  this.checkBufferForBeat(indexBuffHighestVar);
+        beat =  this.checkBufferForBeat(indexBuffHighestVar, threshold);
 
         return beat;
 
     }
 
-    this.detectBeat = function()
+    this.detectBeat = function(threshold)
     {
         // make the draw loop be called 60 times per second (adaptable)
         this.setFrameRate(70);
-        var isBeat = this.checkBuffersForBeat();
+        var isBeat = this.checkBuffersForBeat(threshold);
         return isBeat;
     }
 }

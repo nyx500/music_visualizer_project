@@ -24,6 +24,17 @@ function Visualisations(){
 		for(var i = 0; i < this.visuals.length; i++){
 			if(visName == this.visuals[i].name){
 				this.draw();
+				/* New visual being selected --> make sure that
+				if the GUI for the new visual exists, it is
+				being shown by changing the visGuiShowing global
+				variable to 'true' (this variable is used in
+				the toggleGuis() function called in draw()
+				in sketch.js to determine if the GUI should be hidden)
+				*/
+				if (this.selectedVisual != this.visuals[i])
+				{
+					visGuiShowing = true;
+				}
 				this.selectedVisual = this.visuals[i];
 			}
 		}
