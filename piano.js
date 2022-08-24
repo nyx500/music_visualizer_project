@@ -1,40 +1,17 @@
-// adjust piano threshold
-var pianoSensitivityLimit;
-var pianoSensitivityLimitMin;
-var pianoSensitivityLimitMax;
-var pianoSensitivityLimitStep;
-
-pianoSensitivityLimit = 201;
-pianoSensitivityLimitMin = 170;
-pianoSensitivityLimitMax = 250;
-pianoSensitivityLimitStep = 1;
 
 
-var bins;
-bins = [1024, 512, 256, 128, 64];
-
-var pianoColor1 = [
-    'lightgray','red', 'aqua', 'blueviolet',
-    'darkblue', 'gold', 'lightpink',
-    'plum','orange', 
-];
-var pianoColor2 = [
-    'darkslategray', 'crimson', 'mediumorchid', 'mediumaquamarine',
-    'yellow', 'lightgreen', 'lightslategrey', 'steelblue',
-    'saddlebrown', 'turquoise', 'violet'
-]
-
-
-// maps fourier.analyze() frequency amplitude values to notes on a piano
+// Piano maps fourier.analyze() frequency-groups amplitude values to notes on a piano
 function Piano(){
     this.name = "piano";
     this.octaves;
-    var mapped_array;
+    var mappedFreqsArray;
 
+    // GUI for Piano --> contains globals for amplitude threshold, number freq bins, color of keys
     this.gui = createGui('Piano Visualization: ' + generalText);
     this.gui.setPosition(width * 0.8, 30);
-    this.gui.addGlobals('pianoSensitivityLimit',
-                        'bins',
+    this.gui.addGlobals('pianoThreshold',
+                        'pianoSmoothingFactor',
+                        'pianoBins',
                         'pianoColor1',
                         'pianoColor2');
 
@@ -48,9 +25,9 @@ function Piano(){
         this.gui.show();
     }
 
-    /*  an array of seven objects storing the frequencies of all the notes a piano, 
+    /*  An array of seven objects storing the frequencies of all the notes a piano, 
     divided into objects storing the frequencies for every note in each octave*/
-    this.frequenciesOfOctaves = [
+    this.pianoFrequencies = [
         {
             tones:[32.703, 36.708, 41.203, 43.654, 48.99, 55, 61.735],
             semitones:[34.648, 38.891, 46.249, 51.913, 58.27]
@@ -83,14 +60,14 @@ function Piano(){
         }
     ]
     
-    /* function which returns an array of objects for the keys in each of the 7 octaves
-    each key is an object with its properties being its drawing coordinates, color, type of sound,
-    and piano frequency */
+    /* Function which returns an array of objects for the keys in each of the 7 octaves.
+    Each key is an object with its properties being its x-y coords, black or white color, type of sound,
+    and the frequency of this key on the piano */
     this.makeOctave = function(x, y, key_width, key_height, freq_array){
         
         let octave = [];
 
-        // white keys
+        // White keys
         for (var i = 0; i < 7; i++)
         {
             octave.push({
@@ -105,7 +82,7 @@ function Piano(){
         })
         }
 
-        // first two semitones in an octave
+        // First two semitones in an octave
         for (var i = 0; i < 2; i++)
         {
             octave.push(
@@ -121,7 +98,8 @@ function Piano(){
                 }
             )
         }
-        // last two semitones in an octave
+
+        // Last two semitones in an octave
         for (var i = 3; i < 6; i++)
         {
             octave.push(
@@ -137,57 +115,65 @@ function Piano(){
                 }
             )
         }
-
         return octave;
     }
 
-    // returns an array of all seven octaves (made up of object keys) in the piano
-    // calls the makeOctave function for each of the 7 octaves needed
+    // Returns an array of all seven octaves (made up of object keys) in the piano
+    // Calls the makeOctave function to return each of the 7 octaves of key-objects in a piano
     this.makeOctaves = function()
     {
         var octaves = [];
 
         for (var i = 0; i < 7; i++)
         {
-            octaves.push(this.makeOctave(
-                ((width / 55) * 7) * i + width * 0.06, 
+            octaves.push(
+                this.makeOctave(
+                // x-coordinate
+                ((width / 55) * 7) * i + (width * 0.06), 
+                // y-coordinate
                 height * 0.25,
+                //key's width
                 ((width - 20) / 55),
+                // key's height
                 height * 0.5,
-                this.frequenciesOfOctaves[i]
-            ));
+                // corresponding frequency array
+                this.pianoFrequencies[i]
+                )
+            );
         }
 
         return octaves;
     }
     
-    /* 'bins' is a global variable changed via the GUI that determines how many frequencies
-    the fourier.analyze() function will return - too many bins means too many fourier.analyze()
+    /* 'pianoBins' is a global variable changed via the GUI that determines how many frequencies
+    the fourier.analyze() function will return. Too many pianoBins means too many fourier.analyze()
     frequencies will be mapped to the piano notes, so the notes highlighted will not change
     frequently enough */
-    /* uses JS ES6 .map array method to give each frequency in the fourier.analyze() array
-    a corresponding frequency on the piano */
     this.mapFourierToPiano = function()
-    {
-        mapped_array = fourier.analyze(bins).map((element, index) =>
+    {   
+        
+        /* Uses JS ES6 .map array method to give each frequency in the fourier.analyze() array
+        a corresponding frequency on the piano */
+        mappedFreqsArray = fourier.analyze(pianoBins).map((element, index) =>
             element = {
-                frequency: map(index, 0, fourier.analyze(bins).length, 32.703, 3951.1),
+                frequency: map(index, 0, fourier.analyze(pianoBins).length, 32.703, 3951.1),
                 energy: element
             }
         )
-        return mapped_array;
+        return mappedFreqsArray;
     }
 
-    /*draws the piano using the coordinates stored in each key object in
+    /* Draws the piano using the coordinates stored in each key object in
     the octave array */
     this.drawPiano = function()
     {   
-        
-        background(0);
+        // Per octave
         for (var i = 0; i < this.octaves.length; i++)
-        {
+        {   
+            // Per key
             for (var j = 0; j < this.octaves[i].length; j++)
-            {
+            {   
+                // Fills the key with the color stored in the object and draws it
                 fill(this.octaves[i][j].color);
                 rect(
                     this.octaves[i][j].x, 
@@ -201,22 +187,25 @@ function Piano(){
         strokeWeight(1);
     }
 
-    // if a frequency is played loud enough, then the piano key corresponding to it changes color
+    // If a frequency is played loud enough, then the piano key corresponding to it changes color
+    // This shows the key is being 'pressed'
     this.changeKeyColor = function(color1, color2)
     {
-        for (var i = 0; i < mapped_array.length; i++)
+        for (var i = 0; i < mappedFreqsArray.length; i++)
         {
-            /* the global variable pianoSensitivityLimit sets how loud frequency has to
-             be for each note to be highlighted */
-            if (mapped_array[i].energy > pianoSensitivityLimit)
+            /* The global variable pianoThreshold sets how loud frequency has to
+             be for each note to be selected/change color */
+            if (mappedFreqsArray[i].energy > pianoThreshold)
             {   
+                // Selects the correct octave
                 for (var j = 0; j < this.octaves.length; j++)
-                {
+                {   
+                    // Selects a key in that octave
                     for (var k = 0; k < this.octaves[j].length; k++)
                     {   
-                        /* changes the color of a key if its corresponding frequency
-                        in mapped_array is louder than the pianoSensitivityLimit value */
-                        if (Math.abs(mapped_array[i].frequency - this.octaves[j][k].frequency) <= 1)
+                        /* Changes the color of a key if its corresponding frequency
+                        in mappedFreqsArray is louder than the pianoThreshold value */
+                        if (Math.abs(mappedFreqsArray[i].frequency - this.octaves[j][k].frequency) <= 1)
                         {   
                             if (this.octaves[j][k].color == "white")
                             {
@@ -242,9 +231,9 @@ function Piano(){
 
         /* 'smoothingFactor' is aa changeable variable (via GUI) determining
          the level of smoothing between samples*/
-        fourier.smooth(smoothingFactor);
+        fourier.smooth(pianoSmoothingFactor);
 
-        let mapped_array = this.mapFourierToPiano();
+        let mappedFreqsArray = this.mapFourierToPiano();
 
         // colors can be chosen from GUI interface
         this.changeKeyColor(pianoColor1, pianoColor2);

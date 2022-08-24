@@ -1,32 +1,6 @@
-//global for background galaxy image;
-var galaxyBgImg;
-// global for nyc image
-/*https://www.goodfon.com/download/4k-hd-background-metropolis-skyline-architecture-tower-skysc/1920x1080/
-*/
-var nyc;
-//global for the controls and input 
-var controls = null;
-//store visualisations in a container
-var vis = null;
-//variable for the p5 sound object
-var sound = null;
-//variable for p5 fast fourier transform
-var fourier;
-// checks if mode is fullscreen
-var fullscreenMode = false;
-// chooseVisual gui
-var guiChooseVisual;
-// General Gui text heading
-var generalText = 'Show/hide using space bar!'
-var visGuiShowing = true;
-var pickVisual;
-
-
-var fullScreenImage;
-
-
 function preload(){
-	sound = loadSound('assets/moonlightShadow.mp3');
+	sound = loadSound('/assets/africa.mp3');
+	// Globals for setting the fullscreen/exit fullscreen icons are defined
 	fullScreenImage = loadImage('assets/fullScreen.png');
 	exitFullScreenImage = loadImage('assets/exitFullScreen.png');
 }
@@ -34,17 +8,20 @@ function preload(){
 function setup(){
 	createCanvas(windowWidth, windowHeight);
 	background(0);
-
+	// Loads background images for Starfield and Raindrops visualizations
 	galaxyBgImg = loadImage('assets/galaxy.jpg');	
 	nyc = loadImage('assets/nyc.jpg');
 
+	// Loads controls
 	controls = new ControlsAndInput();
 
-	//instantiate the fft object
+	// Instantiates a new fft object
 	fourier = new p5.FFT();
 
-	//create a new visualisation container and add visualisations
+	// Create a new visualisation container
 	vis = new Visualisations();
+
+	// Add all the visualizations
 	vis.add(new Spectrum());
 	vis.add(new WavePattern());
 	vis.add(new Needles());
@@ -59,17 +36,15 @@ function setup(){
 	vis.add(new Tree());
 	vis.add(new Hearts());
 	vis.add(new PastelRoom());
+	vis.add(new Butterfly());
 	
-	
-	// create array of visuals names to put in GUI
-	pickVisual = [];
+	// Makes an array of visuals to choose from in GUI
 	for (var i = 0; i < vis.visuals.length; i++)
 	{	
 		let name = vis.visuals[i].name;
 		let capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
 		pickVisual.push(capitalizedName);
 	}
-
 	guiChooseVisual = createGui('Choose a Visual...');
 	guiChooseVisual.setPosition(100, 20);
 	guiChooseVisual.addGlobals(
@@ -89,6 +64,7 @@ function draw(){
 	controls.draw();
 }
 
+// CONTROLS AND INPUTS FUNCTIONS
 function mouseClicked(){
 	controls.mousePressed();
 }
@@ -98,8 +74,8 @@ function keyPressed()
 }
 
 
-//when the window has been resized. Resize canvas to fit 
-//if the visualisation needs to be resized call its onResize method
+// RESIZE CANVAS IF WINDOW RESIZED
+// CALL ONRESIZE() FUNCTION IF NEED TO RESIZE VISUALIZATION, e.g. center starfield
 function windowResized(){
 	resizeCanvas(windowWidth, windowHeight);
 	if(vis.selectedVisual.hasOwnProperty('onResize')){
@@ -107,13 +83,15 @@ function windowResized(){
 	}
 }
 
-// Displays or hides GUIs for user input for all visualizations that have one
+// Displays or hides individual visualization GUIs based on keyboard input in Controls and Inputs
+// Some visualizations have their own GUIs that enable the user to change parameters of the functions
+// in a visualization, e.g. the beat threshold or color
 function toggleGuis()
 {	
-	// Current visualization does not have a GUI
+	// Current visualization does not have a personalized GUI: do this
 	if (vis.selectedVisual.gui == null)
 	{	
-		// Hide all other GUIs for other visualizations
+		// Hide all other GUIs from the other visualizations
 		for (var i = 0; i < vis.visuals.length; i++)
 		{
 			if (vis.visuals[i].gui != null)
@@ -122,9 +100,11 @@ function toggleGuis()
 			}
 		}
 	}
-	// Current visualization has a GUI
+	// Current visualization does have a specified GUI for user input: do this
 	else
 	{	
+		// Iterates over all the visualizaions and if a visualization has a GUI
+		// but is not the CURRENT visualization, then hide this GUI
 		for (var i = 0; i < vis.visuals.length; i++)
 		{
 			if (vis.visuals[i].gui != null)
@@ -136,15 +116,15 @@ function toggleGuis()
 				}
 			}
 			else
-			{
-				// Checks if "visGuiShowing" global is set to true
-				/* "visuGuiShowing" is toggled true/false in controlsAndInput
-					by pressing the Space key
-				*/
+			{	
+				// For the *current* visualization's GUI...
+				/* Shows the GUI if the visGuiShowing Global is TRUE (set by keyboard press space)
+				in controls and inputs */
 				if (visGuiShowing)
 				{	
 					vis.selectedVisual.showGui();
 				}
+				/*Hides the GUI if visuGuiShowing Global is FALSE (also controlled by space key)*/
 				else
 				{
 					vis.selectedVisual.hideGui();

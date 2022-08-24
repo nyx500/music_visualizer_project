@@ -14,7 +14,20 @@
 function RidgePlots() {
 	//vis name
 	this.name = "ridgeplots";
-    this.gui = null;
+    // GUI --> choose num of freq bins
+    this.gui = createGui('Ridgeplots Visualization: ' + generalText);
+    this.gui.setPosition(width * 0.8, 30);
+    this.gui.addGlobals('ridgeBins');
+
+    this.hideGui = function()
+    {   
+        this.gui.hide();
+    }
+
+    this.showGui = function()
+    {   
+        this.gui.show();
+    }
     // private variables because only need to be accessed in this constructor function
     var output = [];
     // the left edge of the plot
@@ -30,7 +43,7 @@ function RidgePlots() {
 
     var addWave = function() {
         
-        var w = fourier.waveform(bins);
+        var w = fourier.waveform(ridgeBins);
         var output_wave = [];
         var smallScale = 3;
         var bigScale = 100;

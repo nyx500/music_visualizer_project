@@ -10,7 +10,7 @@ function Needles() {
 	this.plotsAcross = 2;
 	this.plotsDown = 2;
 
-	//frquencies used by the energyfunction to retrieve a value
+	//frequencies used by the energyfunction to retrieve a value
 	//for each plot.
 	this.frequencyBins = ["bass", "lowMid", "highMid", "treble"];
 
