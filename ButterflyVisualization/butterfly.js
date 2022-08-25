@@ -73,47 +73,78 @@ function Butterfly()
         }
         return arrayOfWingOutlines;
     }
-
     
+    // Makes wing outlines
     this.wingOutlines = this.makeWingOutlines();
+    // Signals that wings are loaded
+    this.loadedWings = false;
+
+     // Draws central brown body of butterfly
+    this.drawBody = function()
+     {
+         // Draws body of butterfly
+         strokeWeight(12);
+         stroke(92, 64, 51);
+         strokeCap(ROUND);
+         line(width / 2, (height * 3/4), width / 2, (height / 4));
+ 
+         // Draws antenna
+         line(width / 2, (height / 4), width * 0.45, (height / 10));
+         line(width / 2, (height / 4), width * 0.55, (height / 10));
+ 
+         // Draws eyes
+         fill(255);
+         noStroke();
+         ellipse((width * 0.45), height/10, 20, 20);
+         ellipse((width * 0.55), height/10, 20, 20);
+         
+         // If beat, move the butterfly's eyes
+         if (beatDetector.detectBeat())
+         {
+             fill(0);
+             ellipse((width * 0.45 + 3), height/10, 8, 8);
+             ellipse((width * 0.55 + 3), height/10, 8, 8);
+         }
+         else
+         { 
+             fill(0);
+             ellipse((width * 0.45), height/10, 8, 8);
+             ellipse((width * 0.55), height/10, 8, 8);
+         }
+     }
     
-    this.draw = function()
+    // Flips this.loadedWings flag to true
+    this.changeLoaded = function()
+    {
+        this.loadedWings = true;
+    }
+     
+
+    // Draws wing outlines of butterfly
+    // Calls changeLoaded when wings are drawn
+    this.drawWingOutlines = function(callback)
     {   
         // Wing outlines take yoff argument: a y-offset that maps the wing position to frame number
         // This is what allows the wings to flap if there is a beat
         for (var i = 0; i <this.wingOutlines.length; i++)
         {   
             this.wingOutlines[i].draw(this.yoff);
-        }
+        }  
+        callback();
+    }
 
-        // Draws body of butterfly
-        strokeWeight(12);
-        stroke(92, 64, 51);
-        strokeCap(ROUND);
-        line(width / 2, (height * 3/4), width / 2, (height / 4));
 
-        // Draws antenna
-        line(width / 2, (height / 4), width * 0.45, (height / 10));
-        line(width / 2, (height / 4), width * 0.55, (height / 10));
-
-        // Draws eyes
-        fill(255);
-        noStroke();
-        ellipse((width * 0.45), height/10, 20, 20);
-        ellipse((width * 0.55), height/10, 20, 20);
-        
-        // If beat, move the butterfly's eyes
-        if (beatDetector.detectBeat())
+    
+    this.draw = function()
+    {  
+        // I tried to use a callback function for the body to be drawn only after the wings are drawn
+        // However, this doesn't work and I don't know why
+        // The body is still being drawn first, and this is very confusing, but I am near the deadline
+        // and still do not understand why the callback doesn't work!
+        this.drawWingOutlines(this.changeLoaded);
+        if (this.changeLoaded)
         {
-            fill(0);
-            ellipse((width * 0.45 + 3), height/10, 8, 8);
-            ellipse((width * 0.55 + 3), height/10, 8, 8);
-        }
-        else
-        { 
-            fill(0);
-            ellipse((width * 0.45), height/10, 8, 8);
-            ellipse((width * 0.55), height/10, 8, 8);
+            this.drawBody();
         }
 
         // This y-offset value controls how fast the butterfly beats its wings
