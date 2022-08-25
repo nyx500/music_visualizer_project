@@ -30,6 +30,12 @@ function Tree()
         to summer)
     */
     this.seasonPhase = 0;
+    this.backgroundColor = {
+        red: 150,
+        green: 150,
+        blue: 255
+    }
+        
 
     /* This variable will be used to calculate which branches spawn new branches with every iteration
     */
@@ -59,6 +65,13 @@ function Tree()
     this.maxLeafCount = 0;
     // Array of snowball objects
     this.snowballs = [];
+
+    this.onResize = function()
+    {   
+        push();
+        translate(width / 2, height);
+    }
+    
 
     /* Checks if an object returned by the Branch constructor's
     addBranch method is a leaf OR another branch, 
@@ -418,7 +431,7 @@ function Tree()
             
             // If snowball is fallen, then delete it from the snowballs array
             if (this.snowballs[i].fallen)
-            {
+            {   
                 this.snowballs.splice(i, 1);
             }
         }
@@ -427,9 +440,14 @@ function Tree()
 
     this.draw = function()
     {   
+        background(this.backgroundColor.red, this.backgroundColor.green, this.backgroundColor.blue);
 	    controls.draw();
         colorMode(RGB);
         strokeCap(PROJECT);
+
+        // Creates a rectangle of dark green grass behind the tree
+        fill('darkgreen');
+        rect(0, height * 0.85, width, height);
 
         // Drawing different components of the tree and weather
         this.drawBranches();
@@ -465,7 +483,7 @@ function Tree()
             }
             // SPRING: Lighten leaves on the tree
             else if (this.seasonPhase == 1)
-            {       
+            {   
                 if (this.howManyLeavesLightened > 0.99 * this.leaves.length)
                 {
                     this.seasonPhase = 2;
@@ -508,6 +526,11 @@ function Tree()
             // LATE SUMMER: Drop the fruits off the tree
             else if (this.seasonPhase == 4)
             {   
+                // Darken background color to a stronger blue
+                this.backgroundColor.red = 120;
+                this.backgroundColor.green = 120;
+                this.backgroundColor.blue = 245;
+
                 this.fruitsRipened = 0;
                 // Sets count for fallen fruits using countFallenFruits() method
                 var fruitsFallen = this.countFallenFruits();
@@ -525,6 +548,11 @@ function Tree()
             // AUTUMN: Turn color of leaves
             else if (this.seasonPhase == 5)
             {   
+                // Change background color to bluish grey
+                this.backgroundColor.red = 70;
+                this.backgroundColor.green = 70;
+                this.backgroundColor.blue = 90;
+
                 // Records number of leaves which have changed color
                 var leavesTurned = this.countAutumnLeaves();
                 // If less than 95% of leaves have turned color, turn more
@@ -541,6 +569,11 @@ function Tree()
             // LATE AUTUMN: drop leaves from the tree
             else if (this.seasonPhase == 6)
             {   
+                // Change background to black for winter
+                this.backgroundColor.red = 10;
+                this.backgroundColor.green = 10;
+                this.backgroundColor.blue = 10;
+
                 // Fallen leaves counter
                 var leavesFallen = this.countFallenLeaves();
 
@@ -575,8 +608,6 @@ function Tree()
             // WINTER: No leaves left on the tree. Snowballs start falling (look below)
             else if (this.seasonPhase == 7)
             {   
-                
-                console.log('phase 7');
 
                 if (this.leaves.length == 0)
                 {   
@@ -586,7 +617,6 @@ function Tree()
             // WINTER FINISHES: all snowballs have dropped
             else if (this.seasonPhase == 8)
             {   
-                console.log('phase 8');
 
                 if (this.snowballs.length == 0)
                 {   
@@ -596,6 +626,12 @@ function Tree()
             // SPRING AGAIN: regrow the leaves on the tree
             else if (this.seasonPhase == 9)
             {   
+                
+                // Changes color back to light blue
+                this.backgroundColor.red = 150;
+                this.backgroundColor.green = 150;
+                this.backgroundColor.blue = 255;
+
                 this.regrowLeaves();
                 // If all leaves regrown, change seasonPhase back to 1 to cycle
                 if (this.leaves.length == this.maxLeafCount)
@@ -628,23 +664,17 @@ function Tree()
             this.seasonPhase == 7
         )
         {   // Vary the number of snowballs falling
-            if (this.leaves.length >= 100)
+            if (this.leaves.length <= 200 && this.leaves.length > 100)
             {
-                this.addSnowballs(25);
+                this.addSnowballs(12);
             }
-            else if (this.leaves.length < 100 > this.leaves.length > 50 )
+            else if (this.leaves.length <= 100 && this.leaves.length > 50)
             {
-                if (frameCount % 2 == 0)
-                {
-                    this.addSnowballs(10);
-                }
+                this.addSnowballs(5);
             }
-            else
+            else if (this.leaves.length <= 50 && this.leaves.length > 20)
             {
-                if (frameCount % 3 == 0)
-                {
-                    this.addSnowballs(5);
-                }
+                this.addSnowballs(3);
             }
         }
 

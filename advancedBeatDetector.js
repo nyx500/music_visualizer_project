@@ -38,7 +38,7 @@ function AdvancedBeatDetector() {
 
     // must be a power of 2 less than 1024 (total fft spectrum has 1024 freqs)
     this.numSubBands = this.sampleBuffersCollection.length;
-    this.numFrequenciesInBuffer = 1024/this.numSubBands;
+    this.numFrequenciesInBuffer = 1024 / this.numSubBands;
     // default frame rate set to 60
     this.frameRate = 60;
 

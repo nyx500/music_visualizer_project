@@ -1,5 +1,5 @@
 function preload(){
-	sound = loadSound('/assets/africa.mp3');
+	sound = loadSound('/assets/tellItToMyHeart.mp3');
 	// Globals for setting the fullscreen/exit fullscreen icons are defined
 	fullScreenImage = loadImage('assets/fullScreen.png');
 	exitFullScreenImage = loadImage('assets/exitFullScreen.png');

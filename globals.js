@@ -72,7 +72,7 @@ var pianoColor2 = [
     'saddlebrown', 'turquoise', 'violet'
 ]
 
-var pianoSmoothingFactor = 0.8;
+var pianoSmoothingFactor = 0.7;
 var pianoSmoothingFactorMin = 0.1;
 var pianoSmoothingFactorMax = 1;
 var pianoSmoothingFactorStep = 0.05;
