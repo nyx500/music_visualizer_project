@@ -1,5 +1,10 @@
 // DECLARES GLOBALS USED THROUGHOUT THE APPLICATION
-
+// List of songs
+var pickSong = [];
+var tracks = [];
+var songIndex;
+let retroFont;
+let normalFont;
 //global for background galaxy image in starfield visualization
 var galaxyBgImg;
 // global for nyc image in rain visualization
@@ -72,7 +77,7 @@ var pianoColor2 = [
     'saddlebrown', 'turquoise', 'violet'
 ]
 
-var pianoSmoothingFactor = 0.7;
+var pianoSmoothingFactor = 0.3;
 var pianoSmoothingFactorMin = 0.1;
 var pianoSmoothingFactorMax = 1;
 var pianoSmoothingFactorStep = 0.05;
@@ -104,3 +109,9 @@ var flapSpeed = 0.3;
 var flapSpeedMin = 0.2;
 var flapSpeedMax = 0.9;
 var flapSpeedStep = 0.05;
+
+// GLOBALS FOR PASTEL ROOM ROTATION ANGLE
+var rotationAngle = 0.02;
+var rotationAngleMin = 0.01;
+var rotationAngleMax = 0.03;
+var rotationAngleStep = 0.005;

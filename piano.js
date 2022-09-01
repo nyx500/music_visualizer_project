@@ -1,5 +1,3 @@
-
-
 // Piano maps fourier.analyze() frequency-groups amplitude values to notes on a piano
 function Piano(){
     this.name = "piano";

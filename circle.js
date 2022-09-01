@@ -118,7 +118,7 @@ function Circle() {
 
         translate(width / 2, height / 2);
         
-        // draws a circle for each quarter of fourier.analyze();
+        // Draws a circle for each quarter of fourier.analyze();
         this.drawCircle(0.75, 1, height * 0.45, height * 0.7,'indigo', 10);
         this.drawCircle(0.5, 0.75, height * 0.35, height * 0.45,'purple', 9);
         this.drawCircle(0.25, 0.5, height * 0.25, height * 0.35,'darkorchid', 7);

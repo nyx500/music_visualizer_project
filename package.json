@@ -1,0 +1,21 @@
+{
+  "name": "musicvis-master",
+  "version": "1.0.0",
+  "description": "simple testing",
+  "main": "sketch.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
+  },
+  "dependencies": {
+    "jsdom-global": "^3.0.2"
+  }
+}
